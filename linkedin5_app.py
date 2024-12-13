@@ -15,7 +15,9 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import streamlit as st
 import pandas as pd
+
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 
 
 # %% [markdown]
@@ -83,7 +85,7 @@ X = ss.drop(columns=['sm_li'])  # Drop the target column to keep features
 y = ss['sm_li']     
 
 # %% [markdown]
-# Split data into training and test set
+## Split data into training and test set
 
 X_train, X_test, y_train, y_test = train_test_split(X.values,
                                                     y,
@@ -105,7 +107,7 @@ X_train, X_test, y_train, y_test = train_test_split(X.values,
 # #### Question 6: Instantiate a logistic regression model and set class_weight to balanced. Fit the model with the training data.
 
 # %%
-from sklearn.linear_model import LogisticRegression
+# from sklearn.linear_model import LogisticRegression
 
 # Initialize the logistic regression model with class_weight set to 'balanced'
 ss_model = LogisticRegression(class_weight='balanced')
