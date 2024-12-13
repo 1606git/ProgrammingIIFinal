@@ -8,7 +8,6 @@
 # Load Packages
 import numpy as np
 import pickle
-import matplotlib.pyplot as plt
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -117,5 +116,41 @@ def preprocess_input(income, education, age, parent, married, gender):
     ]
 
 # Streamlit App
+# Streamlit App
+st.title("LinkedIn User Prediction App")
+st.write("Enter your details to predict LinkedIn usage and probability.")
+
+# User inputs
+income = st.selectbox("Income Range", range(1, 10), format_func=lambda x: income_labels[x - 1])
+education = st.selectbox("Education Level", range(1, 9), format_func=lambda x: education_labels[x - 1])
+age = st.number_input("Age (years)", min_value=0, max_value=98, step=1)
+parent = st.radio("Are you a parent?", ["Yes", "No"])
+married = st.radio("Are you married?", ["Yes", "No"])
+gender = st.radio("Gender", ["Female", "Male"])
+
+# Predict button
+if st.button("Predict"):
+    # Preprocess the input features
+    features = preprocess_input(income, education, age, parent, married, gender)
+
+    if np.nan in features:
+        st.error("Some inputs are invalid. Please check and try again.")
+    else:
+        # Make prediction and calculate probabilities
+        prediction = km_model.predict([features])[0]
+        probabilities = km_model.predict_proba([features])[0]
+
+        # Display results
+        st.subheader("Prediction Results")
+        st.write(f"**LinkedIn User?** {'Yes' if prediction == 1 else 'No'}")
+        st.write(f"**Probability of being a LinkedIn user:** {probabilities[1]:.2%}")
+
+        # Prediction confidence (Bar chart)
+        st.subheader("Prediction Confidence")
+        confidence_df = pd.DataFrame({
+            "Category": ["LinkedIn User", "Not LinkedIn User"],
+            "Probability": [probabilities[1], probabilities[0]]
+        })
+        st.bar_chart(confidence_df.set_index("Category"))
 
 
