@@ -15,10 +15,8 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import streamlit as st
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-
 
 # %% [markdown]
 # ### Ingest Data:
@@ -78,23 +76,18 @@ ss['age'] = ss['age'].apply(lambda x: x if x <= 98 else np.nan)
 
 # print(ss) # Display the cleaned DataFrame
 
-
-# %%
-# Define features and target
+# Define features and target ## Split data into training and test set
 X = ss.drop(columns=['sm_li'])  # Drop the target column to keep features
 y = ss['sm_li']     
 
-# %% [markdown]
-## Split data into training and test set
 
 X_train, X_test, y_train, y_test = train_test_split(X.values,
                                                     y,
-                                                    stratify=y,       # same number of target in training & test set
-                                                    test_size=0.2,    # hold out 20% of data for testing
+                                                    stratify=y,
+                                                    test_size=0.2,
                                                     random_state=987) # set for reproducibility
 
 
-# %% [markdown]
 # + X_train contains 80% of the data and contains the features used to predict the target when training the model. 
 # + X_test contains 20% of the data and contains the features used to test the model on unseen data to evaluate performance. 
 # + y_train contains 80% of the the data and contains the target that we will predict using the features when training the model. 
@@ -102,11 +95,6 @@ X_train, X_test, y_train, y_test = train_test_split(X.values,
 
 # %% [markdown]
 # ### Train Logistic Regression Model
-
-# %% [markdown]
-# #### Question 6: Instantiate a logistic regression model and set class_weight to balanced. Fit the model with the training data.
-
-# %%
 # from sklearn.linear_model import LogisticRegression
 
 # Initialize the logistic regression model with class_weight set to 'balanced'
