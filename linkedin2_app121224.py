@@ -4,13 +4,7 @@
 # ### December 13, 2024
 
 # %% [markdown]
-# ***
-
-# %% [markdown]
 # ### Build a classification model to predict LinkedIn Users and deploy the model on Streamlit
-
-# %% [markdown]
-# #### Import packages:
 
 # %%
 ##Load all packages
