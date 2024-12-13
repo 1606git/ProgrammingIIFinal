@@ -3,7 +3,6 @@
 # ## Katrina Marbley
 # ### December 13, 2024
 
-# %% [markdown]
 # ### Deploy Classification Model on Streamlit
 
 # Load Packages
