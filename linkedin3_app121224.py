@@ -10,10 +10,9 @@
 ##Load all packages
 
 import numpy as np
-import matplotlib.pyplot as plt
 import pickle
 import plotly.express as px
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import streamlit as st
 
 # %% [markdown]
@@ -81,12 +80,6 @@ X = ss.drop(columns=['sm_li'])  # Drop the target column to keep features
 y = ss['sm_li']     
 
 # %% [markdown]
-# #### Question 5: Split the data into training and test sets. Hold out 20% of the data for testing
-
-# %% [markdown]
-# + Explain what each new object contains and how it is used in machine learning
-
-# %%
 # Split data into training and test set
 X_train, X_test, y_train, y_test = train_test_split(X.values,
                                                     y,
@@ -203,6 +196,4 @@ if st.button("Predict"):
             'LinkedIn User': probabilities[1],
             'Not LinkedIn User': probabilities[0]
         })
-
-
 
