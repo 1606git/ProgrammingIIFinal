@@ -84,16 +84,12 @@ y = ss['sm_li']
 # Split data into training and test set
 
 X_train, X_test, y_train, y_test = train_test_split(X.values,
-                 y,
-                 stratify=y,       # same number of target in training & test set
-                 test_size=0.2,    # hold out 20% of data for testing
-                random_state=987) # set for reproducibility
+                                                    y,
+                                                    stratify=y,       # same number of target in training & test set
+                                                    test_size=0.2,    # hold out 20% of data for testing
+                                                    random_state=987) # set for reproducibility
 
-# # Display the shapes of the resulting datasets
-# print(f"X_train shape: {X_train.shape}")
-# print(f"X_test shape: {X_test.shape}")
-# print(f"y_train shape: {y_train.shape}")
-# print(f"y_test shape: {y_test.shape}")
+
 
 # %% [markdown]
 # + X_train contains 80% of the data and contains the features used to predict the target when training the model. 
