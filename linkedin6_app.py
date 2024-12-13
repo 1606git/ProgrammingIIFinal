@@ -1,9 +1,13 @@
-# Final Project 
-## Programming II
-### Katrina Marbley
-#### December 13, 2024
+# %% [markdown]
+# # Final Project- OPAN 6607 Programming II Data Infrastructure Fall 2024 
+# ## Katrina Marbley
+# ### December 13, 2024
+
+# %% [markdown]
+# ### Deploy Classification Model on Streamlit
 
 # Load Packages
+
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
@@ -12,52 +16,73 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
-# Load the dataset
-try:
-    s = pd.read_csv("social_media_usage.csv")
-except FileNotFoundError:
-    st.error("The file 'social_media_usage.csv' was not found. Please ensure it is in the working directory.")
-    raise
+# Data Source: social media usage
+s = pd.read_csv("social_media_usage.csv")
 
-# Subset and rename columns
+# Specify relevant columns to keep
 subset_df = s[['income', 'educ2', 'age', 'par', 'marital', 'web1h', 'gender']].copy()
+
+#rename columns 
+
 subset_df.rename(columns={
-    'educ2': 'education',
-    'par': 'parent',
-    'marital': 'married'
-}, inplace=True)
+        'educ2': 'education',
+        'par': 'parent',
+        'marital': 'married'
+            }, inplace=True)
 
-# Define a function to clean social media usage column
-def clean_sm(x):
-    """Convert to binary: 1 for LinkedIn users, 0 otherwise."""
-    return (x == 1).astype(int)
 
-# Create a cleaned DataFrame and target column
-ss = subset_df.copy()
-ss['sm_li'] = clean_sm(ss['web1h'])
-ss.drop('web1h', axis=1, inplace=True)
+#Define a function to clean social media usage column
+def clean_sm(x): 
+    return np.where(x == 1, 1, 0)
 
-# Process features with valid ranges
+# %%
+#create dataframe ss and target column
+ss = pd.DataFrame(subset_df).copy()
+ss['sm_li'] = clean_sm(ss['web1h']).copy() #new column
+ss.drop('web1h', axis=1,inplace=True)
+
+# %%
+# Process features as valid values , others set to NaN and others as binary
 ss['income'] = ss['income'].apply(lambda x: x if 1 <= x <= 9 else np.nan)
 ss['education'] = ss['education'].apply(lambda x: x if 1 <= x <= 8 else np.nan)
-ss['parent'] = (ss['parent'] == 1).astype(int)
-ss['married'] = (ss['married'] == 1).astype(int)
-ss['gender'] = (ss['gender'] == 2).astype(int)  # Assuming '2' represents 'Female'
+ss['parent'] = ss['parent'].apply(lambda x: 1 if x == 1 else (0))
+ss['married'] = ss['married'].apply(lambda x: 1 if x == 1 else (0))
+ss['gender'] = ss['gender'].apply(lambda x: 1 if x == 2 else (0))
 ss['age'] = ss['age'].apply(lambda x: x if x <= 98 else np.nan)
 
-# Split data into training and test sets
+# print(ss) # Display the cleaned DataFrame
+
+# Define features and target ## Split data into training and test set
+X = ss.drop(columns=['sm_li'])  # Drop the target column to keep features
+y = ss['sm_li']     
+ Split data into training and test sets
 X = ss.drop(columns=['sm_li'])  # Features
 y = ss['sm_li']  # Target
 X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2, random_state=987)
 
-# Train the Logistic Regression model
+
+
+# %% [markdown]
+# ### Train Logistic Regression Model
+# from sklearn.linear_model import LogisticRegression
+
+# Initialize the logistic regression model with class_weight set to 'balanced'
 ss_model = LogisticRegression(class_weight='balanced')
+
+# Fit the model with the training data
 ss_model.fit(X_train, y_train)
 
-# Save the trained model
 with open("ss_model.pkl", "wb") as file:
     pickle.dump(ss_model, file)
 
+print("Model saved successfully!")
+
+
+# >Make predictions
+# y_pred = ss_model.predict(X_test)
+
+
+# %%
 # Load the trained model
 km_model = pickle.load(open("ss_model.pkl", "rb"))
 
@@ -73,11 +98,12 @@ education_labels = [
     "Master’s degree", "Doctorate or professional degree"
 ]
 
-# Define a function to preprocess inputs
+# function to preprocess inputs
 def preprocess_input(income, education, age, parent, married, gender):
-    """Process user inputs for prediction."""
+    # Ensure the inputs are within valid ranges, otherwise set to NaN
     income = income if 1 <= income <= 9 else np.nan
     education = education if 1 <= education <= 8 else np.nan
+    # Age is binned into categories
     age_bin = (
         1 if age <= 18 else
         2 if age <= 35 else
@@ -85,6 +111,7 @@ def preprocess_input(income, education, age, parent, married, gender):
         4 if age <= 75 else
         5 if age <= 98 else np.nan
     )
+    # Returning the processed features
     return [
         income, education, age_bin,
         1 if parent == "Yes" else 0,
@@ -106,11 +133,13 @@ gender = st.radio("Gender", ["Female", "Male"])
 
 # Predict button
 if st.button("Predict"):
+    # Preprocess the input features
     features = preprocess_input(income, education, age, parent, married, gender)
 
     if np.nan in features:
         st.error("Some inputs are invalid. Please check and try again.")
     else:
+        # Make prediction and calculate probabilities
         prediction = km_model.predict([features])[0]
         probabilities = km_model.predict_proba([features])[0]
 
@@ -125,3 +154,4 @@ if st.button("Predict"):
             'LinkedIn User': probabilities[1],
             'Not LinkedIn User': probabilities[0]
         })
+
