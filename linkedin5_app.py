@@ -15,6 +15,8 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import streamlit as st
 import pandas as pd
+from sklearn.model_selection import train_test_split
+
 
 # %% [markdown]
 # ### Ingest Data:
@@ -88,7 +90,6 @@ X_train, X_test, y_train, y_test = train_test_split(X.values,
                                                     stratify=y,       # same number of target in training & test set
                                                     test_size=0.2,    # hold out 20% of data for testing
                                                     random_state=987) # set for reproducibility
-
 
 
 # %% [markdown]
