@@ -20,16 +20,10 @@ import matplotlib.pyplot as plt
 import pickle
 import plotly.express as px
 import matplotlib.pyplot as plt
-#Packages to deploy app for Part 2
 import streamlit as st
 
 # %% [markdown]
 # ### Ingest Data:
-
-# %% [markdown]
-# #### Question 1: Read in the data, call the dataframe "s" and check the dimensions of the dataframe
-
-# %%
 # Data Source: social media usage
 s = pd.read_csv("social_media_usage.csv")
 
@@ -53,13 +47,6 @@ subset_df.rename(columns={
 
 # %% [markdown]
 # ### Feature Engineering:
-
-# %% [markdown]
-# #### Question 2: Define a function called clean_sm that takes one input, x, and uses `np.where` to check whether x is equal to 1
-
-# %% [markdown]
-# + If it is, make the value of x = 1, otherwise make it 0. Return x
-# + Create a toy dataframe with three rows and two columns and test your function to make sure it works as expected
 
 # %%
 #define a function
@@ -95,27 +82,9 @@ print(ss) # Display the cleaned DataFrame
 
 
 # %%
-ss.isnull().sum() #check for sum of missing values
-
-# %% [markdown]
-# #### Drop any missing values in "ss"
-
-# %%
-ss = ss.dropna() #drop values considered as missing 
-
-ss.shape #check dim of ss to validate if rows with missing values are dropped
-
-# %% [markdown]
-# ##### *Plot Proportion of Females Using LinkedIn*
-
-# %%
 # Define features and target
 X = ss.drop(columns=['sm_li'])  # Drop the target column to keep features
 y = ss['sm_li']     
-
-
-# %% [markdown]
-# ***
 
 # %% [markdown]
 # #### Question 5: Split the data into training and test sets. Hold out 20% of the data for testing
@@ -142,10 +111,6 @@ print(f"y_test shape: {y_test.shape}")
 # + X_test contains 20% of the data and contains the features used to test the model on unseen data to evaluate performance. 
 # + y_train contains 80% of the the data and contains the target that we will predict using the features when training the model. 
 # + y_test contains 20% of the data and contains the target we will predict when testing the model on unseen data to evaluate performance.
-# 
-
-# %% [markdown]
-# ***
 
 # %% [markdown]
 # ### Train Logistic Regression Model
@@ -170,15 +135,7 @@ print("Model saved successfully!")
 
 # >Make predictions
 # y_pred = ss_model.predict(X_test)
-# 
-# >Check accuracy
-# from sklearn.metrics import accuracy_score
-# #print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
-# 
-# >(Optional) Compare results
-# #print("Predicted:", y_pred)
-# #print("Actual:", y_test)
-# 
+
 
 # %%
 
