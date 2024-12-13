@@ -20,12 +20,8 @@ import matplotlib.pyplot as plt
 import pickle
 import plotly.express as px
 import matplotlib.pyplot as plt
-
 #Packages to deploy app for Part 2
 import streamlit as st
-
-
-
 
 # %% [markdown]
 # ### Ingest Data:
@@ -37,9 +33,7 @@ import streamlit as st
 # Data Source: social media usage
 s = pd.read_csv("social_media_usage.csv")
 
-
 # ### Examine & Clean Dataset:
-
 
 # %% [markdown]
 # #### Subset the dataset to keep only features specified for project
@@ -55,9 +49,6 @@ subset_df.rename(columns={
         'par': 'parent',
         'marital': 'married'
             }, inplace=True)
-
-
-
 
 
 # %% [markdown]
@@ -78,17 +69,13 @@ def clean_sm(x):
 
 # %% [markdown]
 # #### Question 3: Create a new dataframe called "ss"
-# 
-# 
-
+#  
 # %%
 #create dataframe ss and add binary target column
 ss = pd.DataFrame(subset_df).copy()
 
 ss['sm_li'] = clean_sm(ss['web1h']).copy() #new column
 ss.drop('web1h', axis=1,inplace=True)
-
-
 
 # %%
 # Process features as valid values , others set to NaN and others as binary
@@ -107,7 +94,6 @@ ss['age'] = ss['age'].apply(lambda x: x if x <= 98 else np.nan)
 print(ss) # Display the cleaned DataFrame
 
 
-
 # %%
 ss.isnull().sum() #check for sum of missing values
 
@@ -121,7 +107,6 @@ ss.shape #check dim of ss to validate if rows with missing values are dropped
 
 # %% [markdown]
 # ##### *Plot Proportion of Females Using LinkedIn*
-
 
 # %%
 # Define features and target
@@ -264,8 +249,5 @@ if st.button("Predict"):
 
         st.subheader("Prediction Confidence")
         plot_probabilities(probabilities)
-
-
-
 
 
