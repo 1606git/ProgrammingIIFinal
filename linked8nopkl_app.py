@@ -91,6 +91,7 @@ parent = st.radio("Are you a parent?", ["Yes", "No"])
 married = st.radio("Are you married?", ["Yes", "No"])
 gender = st.radio("Gender", ["Female", "Male"])
 
+
 # Predict button
 if st.button("Predict"):
     # Preprocess the input features
@@ -99,9 +100,12 @@ if st.button("Predict"):
     if np.nan in features:
         st.error("Some inputs are invalid. Please check and try again.")
     else:
+        # Convert features to a DataFrame with the same columns as the training data
+        features_df = pd.DataFrame([features], columns=X_train.columns)
+        
         # Make prediction and calculate probabilities
-        prediction = ss_model.predict([features])[0]
-        probabilities = ss_model.predict_proba([features])[0]
+        prediction = ss_model.predict(features_df)[0]
+        probabilities = ss_model.predict_proba(features_df)[0]
 
         # Display results
         st.subheader("Prediction Results")
